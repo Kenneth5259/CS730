@@ -11,21 +11,54 @@ package com.carrollk.week5;
  */
 
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class Assignment4 {
     public static void main(String[] args) {
-        unsortedArr arr = new unsortedArr(1000);
         
-        for(int i = 1; i <= 10000; i++) {
-            System.out.print("Test Case " + i + ": ");
-            arr.generate();
-            if(arr.recursiveMedian() == arr.sortedMedian()) {
-                System.out.print("pass");
-            } else {
-                System.out.print("fail");
+        
+        boolean loop = true;
+        Scanner input = new Scanner(System.in);
+        while(loop) {
+            System.out.println("Select From: ");
+            System.out.println("1. Read Array");
+            System.out.println("2. Generate Array");
+            System.out.println("3. Print Array");
+            System.out.println("4. Median");
+            System.out.println("5. Run Test Cases");
+            System.out.println("0. Quit");
+            
+            switch(input.nextLine()) {
+                case "1":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    unsortedArr arr = new unsortedArr(1000);
+        
+                    for(int i = 1; i <= 10000; i++) {
+                        System.out.print("Test Case " + i + ": ");
+                        arr.generate();
+                        if(arr.recursiveMedian() == arr.sortedMedian()) {
+                            System.out.print("pass");
+                         } else {
+                            System.out.print("fail");
+                        }
+                        System.out.println();
+                    }
+                    break;
+                case "0":
+                    loop = false;
+                    break;
+                default:
+                    System.out.println("Please enter 0, 1, 2, 3, 4, or 5.");
+                    break;
             }
-            System.out.println();
         }
     }
 }
@@ -97,13 +130,16 @@ class unsortedArr {
             return -1;
         }
         
+        // index of the expected median
+        int idxMedian = n/2;
+        
         // run helper function, initial lower and upper bounds at full length
-        return recursiveMedian(0, n-1);
+        return kthSmallestElement(0, n-1, idxMedian);
     }
     
     /**
      * 
-     * Recursive Median returns the median value of a list without a full sort
+     * kthSmallestElement returns the Kth smallest  value of a list without a full sort
      * This is achieved by partitioning the array and subsequent subarrays until
      * a pivot is placed at the index of the median if the array was sorted
      * 
@@ -112,34 +148,37 @@ class unsortedArr {
      * @param upper defines the upper bound 
      * @return will only return the median value or will recur itself
      */
-    public int recursiveMedian(int lower, int upper) {
-        
-        // index of the eventual median
-        int idxMedian = n/2;
+    public int kthSmallestElement(int lower, int upper, int k) {
         
         // index of the lower partition value
         int idxPartition = partition(lower, upper);
         
         // indicated that the partition/pivot is the median index
-        if(idxPartition == idxMedian) {
+        if(idxPartition == k) {
            
             // returns the median value
             return a[idxPartition];
             
           // indicated that the lower half contains the median index
-        } else if(idxPartition > idxMedian) {
+        } else if(idxPartition > k) {
             
             // runs with the new upper bound set to the previous pivot
-            return recursiveMedian(0, idxPartition-1);
+            return kthSmallestElement(0, idxPartition-1, k);
             
             // indicates that the upper half contains the median index
         } else {
             
             //runs with the new lower bound
-            return recursiveMedian(idxPartition+1, n-1);
+            return kthSmallestElement(idxPartition+1, n-1, k);
         }
     }
     
+    /**
+     * Copied directly from this weeks example for advanced sorting techniques
+     * @param left
+     * @param right
+     * @return 
+     */
     
     public int partition(int left, int right)
     {	
