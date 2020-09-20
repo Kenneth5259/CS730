@@ -17,9 +17,16 @@ import java.util.Scanner;
 public class Assignment4 {
     public static void main(String[] args) {
         
+        // initialize an unsorted array object
+        unsortedArr arr = new unsortedArr();
         
+        // set loop 
         boolean loop = true;
+        
+        // initialize scanner
         Scanner input = new Scanner(System.in);
+        
+        // looped system menu
         while(loop) {
             System.out.println("Select From: ");
             System.out.println("1. Read Array");
@@ -31,26 +38,45 @@ public class Assignment4 {
             
             switch(input.nextLine()) {
                 case "1":
+                    arr.read();
                     break;
                 case "2":
+                    arr.generate();
                     break;
                 case "3":
+                    arr.display();
                     break;
                 case "4":
+                    System.out.println("Median: " + arr.recursiveMedian());
                     break;
                 case "5":
-                    unsortedArr arr = new unsortedArr(1000);
-        
+                    
+                    // initialize test pass/fail counters
+                    int totalPass = 0, totalFail = 0;
+                    
+                    // loop for an arbitrarily large number
                     for(int i = 1; i <= 10000; i++) {
+                        
+                        // display counter
                         System.out.print("Test Case " + i + ": ");
+                        
+                        // generate an array, and copy to keep sort/partitioning separate
                         arr.generate();
-                        if(arr.recursiveMedian() == arr.sortedMedian()) {
+                        unsortedArr testArr = arr;
+                        
+                        // check if the test passes, and increment the appropriate counter
+                        if(arr.recursiveMedian() == testArr.sortedMedian()) {
                             System.out.print("pass");
+                            totalPass++;
                          } else {
                             System.out.print("fail");
+                            totalFail++;
                         }
+                        
                         System.out.println();
                     }
+                    System.out.println("Total Passed: " + totalPass + ", Total Failed: " + totalFail);
+                    System.out.println();
                     break;
                 case "0":
                     loop = false;
@@ -82,6 +108,7 @@ class unsortedArr {
         n = 10;
     }
     
+    // display all elements in the array
     public void display() {
         for(int i = 0; i < n; i++) {
             System.out.print(a[i] + " ");
@@ -100,13 +127,34 @@ class unsortedArr {
     }
     
     
+    // read in the information, copied directly from example 14
+    public void read()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter elements (negative to end): ");
+        
+        int i;
+        for (i = 0; i < a.length; i++)        // allow at most a.length elements to be stored into the array
+        {
+            int e = input.nextInt();
+            
+            if (e >= 0)
+                a[i] = e;                   // store a non-negative number into the array 
+            else                        
+                break;
+        }
+        n = i;                              // record the total number of elements that have been stored into the array
+        
+    }
+    
+    
     // method to sort then return median. Used for testing
     public int sortedMedian() {
         if(n < 1) {
             return -1;
         }
         
-        int idxMedian = (n/2) ;
+        int idxMedian = n % 2 == 1 ? n/2 : (n-1)/2;
         
         for(int i = n-1; i > 0; i--) {
             
@@ -123,6 +171,8 @@ class unsortedArr {
         
     }
     
+    
+    // wrapper function for kthSmallest element, sets K to a calculated median index
     public int recursiveMedian() {
         
         // list generation can create an empty list, this handles it
@@ -131,9 +181,9 @@ class unsortedArr {
         }
         
         // index of the expected median
-        int idxMedian = n/2;
+        int idxMedian = n % 2 == 1 ? n/2 : (n-1)/2;
         
-        // run helper function, initial lower and upper bounds at full length
+        // run kthSmallestElement, initial lower and upper bounds at full length
         return kthSmallestElement(0, n-1, idxMedian);
     }
     
@@ -168,13 +218,13 @@ class unsortedArr {
             // indicates that the upper half contains the median index
         } else {
             
-            //runs with the new lower bound
+            // runs with the new lower bound
             return kthSmallestElement(idxPartition+1, n-1, k);
         }
     }
     
     /**
-     * Copied directly from this weeks example for advanced sorting techniques
+     * Copied directly from this weeks example 14 for advanced sorting techniques
      * @param left
      * @param right
      * @return 
