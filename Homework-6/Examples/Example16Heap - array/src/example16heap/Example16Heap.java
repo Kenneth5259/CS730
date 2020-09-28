@@ -47,7 +47,8 @@ public class Example16Heap
                     System.out.println("Not Implemented Yet");
                     break;
                 case "5":
-                    System.out.println("Not Implemented Yet");
+                    System.out.println("Enter the key to be searched for: ");
+                    myheap.search(input.nextInt());
                     break;
                 case "0":
                     loop = false;
@@ -114,19 +115,7 @@ class Heap
         // satisfy the heap condition for each subtree
         
         for(int i = 0; i < n/2; i++) {
-            
-            // calculate the last subtree
-            int idxSubtree = ( (n / 2) - 1 );
-            
-            // increment over each subtree
-            while(idxSubtree >= i) {
-                
-                // upheap the subtree
-                upheap(idxSubtree);
-                
-                // move to the next subtree
-                idxSubtree--;
-            }
+            upheap(i);
         }
         
            
@@ -169,21 +158,31 @@ class Heap
         }
         System.out.println();
     }
-    public boolean isEmpty()
-    {
-        return (n == 0);
-    }
     
     public void upheap(int i) {
-        
+        // calculate the last subtree
+        int idxSubtree = ( (n / 2) - 1 );
+            
+        // increment over each subtree
+        while(idxSubtree >= i) {
+                
+            // upheap the subtree
+            heapRecovery(idxSubtree);
+                
+            // move to the next subtree
+            idxSubtree--;
+        }
     }
     
-    
-    /**
+     /**
+     * 
+     * Check and recover the heap condition at a given parent index
+     * 
+     * 
      * Swap(a, b) is used in this function, see declaration below this function
      * @param i where i is the index of the parent node
      */
-    public void upheap(int i) {
+    public void heapRecovery(int i) {
         // index of the respective tree leaves
         int idxLeft = i*2+1;
         int idxRight = i*2+2;
@@ -212,14 +211,13 @@ class Heap
                 swap(i, idxRight);
             }
             
-            // neither leaf is valid
+         // neither leaf is valid
         } else {
+            
+            // return the void method
             return;
         }
         
-        // troubleshooting, pleaser remove
-        display();
-        System.out.println();
         
         
     }
@@ -235,6 +233,32 @@ class Heap
         a[idxA] = a[idxB];
         a[idxB] = temp;
     }
+    
+    public void search(int key) {
+        int idxFound = -1;
+        for(int i = 0; i < n; i++) {
+            if(a[i] == key) {
+                idxFound = i;
+                break;
+            }
+        }
+        
+        if(idxFound > -1) {
+            System.out.println(key + " found at index " + idxFound);
+        } else {
+            System.out.println(key + " NOT found");
+        }
+    }
+    
+    public boolean isEmpty()
+    {
+        return (n == 0);
+    }
+    
+    
+    
+    
+   
     
     /**
      * 
