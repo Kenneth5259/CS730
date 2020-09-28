@@ -41,7 +41,8 @@ public class Example16Heap
                     myheap.display();
                     break;
                 case "3":
-                    System.out.println("Not Implemented Yet");
+                    System.out.println("Enter a non-negative integer to be inserted: ");
+                    myheap.insert(input.nextInt());
                     break;
                 case "4":
                     System.out.println("Not Implemented Yet");
@@ -125,39 +126,7 @@ class Heap
         // 2) use the entered non-negative integers to build a heap using the algorithm discussed in class
         
     }
-    public void display() {
-        
-        // count the current number of entries on the existing line
-        int counter = 0;
-        
-        // print the 
-        int line = 0;
-        
-        // iterate over the array, print each value
-        for(int i = 0; i < n; i++) {
-            
-            //value prints with a space
-            System.out.print(a[i] + " ");
-            
-            //counter increment
-            counter++;
-            
-            // check if the counter is within the capacity of the given line
-            if(counter == (Math.pow(2, line)) ) {
-                
-                // start a new line
-                System.out.println();
-                
-                //reset counter
-                counter = 0;
-                
-                // update line number
-                line++;
-            }              
-            
-        }
-        System.out.println();
-    }
+    
     
     public void upheap(int i) {
         // calculate the last subtree
@@ -234,6 +203,40 @@ class Heap
         a[idxB] = temp;
     }
     
+    public void display() {
+        
+        // count the current number of entries on the existing line
+        int counter = 0;
+        
+        // print the 
+        int line = 0;
+        
+        // iterate over the array, print each value
+        for(int i = 0; i < n; i++) {
+            
+            //value prints with a space
+            System.out.print(a[i] + " ");
+            
+            //counter increment
+            counter++;
+            
+            // check if the counter is within the capacity of the given line
+            if(counter == (Math.pow(2, line)) ) {
+                
+                // start a new line
+                System.out.println();
+                
+                //reset counter
+                counter = 0;
+                
+                // update line number
+                line++;
+            }              
+            
+        }
+        System.out.println();
+    }
+    
     public void search(int key) {
         int idxFound = -1;
         for(int i = 0; i < n; i++) {
@@ -248,6 +251,47 @@ class Heap
         } else {
             System.out.println(key + " NOT found");
         }
+    }
+    
+    public void insert(int key) {
+        
+        // handle if the heap is at maximum size 
+        if(n == a.length) {
+            System.out.println("Heap at maximum size");
+            return;
+        }
+        
+        // insert the key at the next available slot in the array
+        int idxKey = n;
+        a[idxKey] = key;
+        
+        // update n for new size
+        n++;
+        
+        // calculate the index of the parent
+        int idxParent = (idxKey-1)/2;
+        
+        //loop over worst case scenario, breaking before then if possible
+        while(idxParent >= 0) {
+            
+            // check for recovery
+            if(a[idxParent] < a[idxKey]) {
+                
+                //perform the swap
+                swap(idxParent, idxKey);
+                
+                //update the index as necessary
+                idxKey = idxParent;
+            } else {
+                break;
+            }
+            
+            // loop incrementation by parent level
+            idxParent = (idxParent-1)/2;
+        }
+        
+        
+        
     }
     
     public boolean isEmpty()
