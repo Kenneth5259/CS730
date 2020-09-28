@@ -10,11 +10,28 @@ package example16heap;
  * @author Yang
  */
 
+/**
+ * 
+ * @author Kenneth Carroll
+ * @date: 09-27-2020
+ * 
+ * Each updated section that I have modified 
+ * has an explicit author and date to reflect
+ * any changes or new additions
+ */
+
 import java.util.Scanner;
 import java.lang.Math;
 
 public class Example16Heap 
 {
+    /**
+     * @author Kenneth Carroll
+     * @date: 09-27-2020
+     * @param args 
+     * 
+     * main function for prompting user input
+     */
     public static void main(String[] args) 
     {
         Scanner input = new Scanner(System.in);
@@ -52,6 +69,7 @@ public class Example16Heap
                     myheap.search(input.nextInt());
                     break;
                 case "0":
+                    System.out.println("Thanks for using my program");
                     loop = false;
                     break;
                 default:
@@ -72,13 +90,27 @@ class Heap
     private int n;
     private int a[];
 
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * @param size 
+     * 
+     * removed the call to build to allow user access to main menu
+     * before requiring input
+     */
     public Heap(int size)
     {
         a = new int[size];
 	n = 0;                      // initialized with an empty heap
-                           // build the heap: bottom-up approach
     }
-
+    
+    /**
+     * 
+     * @author Kenneth Carroll
+     * @date: 09-27-2020
+     * 
+     * build the heap through handling user input
+     */
     public void build()
     {
         // Store a set of data items into the array. They will make a heap without any adjustment
@@ -119,14 +151,15 @@ class Heap
             upheap(i);
         }
         
-           
-        
-        // In the homework assignment, need to remove the above 11 statements and replace them with your own code that
-        // 1) ask the user to enter non-negative intergers (negative to stop)
-        // 2) use the entered non-negative integers to build a heap using the algorithm discussed in class
-        
     }
     
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * @param i determines the maximum height that will iterate from bottom-up
+     * 
+     * upheap function to satisfy the heap requirements
+     */
     
     public void upheap(int i) {
         // calculate the last subtree
@@ -145,11 +178,12 @@ class Heap
     
      /**
      * 
-     * Check and recover the heap condition at a given parent index
-     * 
-     * 
-     * Swap(a, b) is used in this function, see declaration below this function
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
      * @param i where i is the index of the parent node
+     * 
+     * perform heap recovery if necessary by determining the max between
+     * a parent and both child leaves
      */
     public void heapRecovery(int i) {
         // index of the respective tree leaves
@@ -176,6 +210,8 @@ class Heap
             }
          // check if right is the valid leaf
         } else if (idxRight < n) {
+            
+            // check if swap is necesssary
             if(a[i] < a[idxRight]) {
                 swap(i, idxRight);
             }
@@ -192,9 +228,12 @@ class Heap
     }
     
     /**
-     * Basic swap method
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
      * @param idxA index of item A
      * @param idxB index of item B
+     * 
+     * A method to swap to elements at the provided indexes
      */
     
     public void swap(int idxA, int idxB) {
@@ -202,6 +241,14 @@ class Heap
         a[idxA] = a[idxB];
         a[idxB] = temp;
     }
+    
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * 
+     * Method to display the given heap using a counter and a line number
+     * to determine how many items fit on each line
+     */
     
     public void display() {
         
@@ -237,15 +284,32 @@ class Heap
         System.out.println();
     }
     
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * @param key
+     * Function to search for a given key and specify the index 
+     * of the key should it be found.
+     *  
+     */
     public void search(int key) {
+        
+        // initialize the index as negative
         int idxFound = -1;
+        
+        // iterate over the array until either it is found or n is reached
         for(int i = 0; i < n; i++) {
+            
+            // check for the key
             if(a[i] == key) {
+                
+                // set index and break the loop
                 idxFound = i;
                 break;
             }
         }
         
+        // provide the user with the most appropriate feedback based off the value of idxFound
         if(idxFound > -1) {
             System.out.println(key + " found at index " + idxFound);
         } else {
@@ -253,6 +317,14 @@ class Heap
         }
     }
     
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * @param key is the value to be inserted 
+     * 
+     * void function to insert a key at the end of the heap then
+     * propagate back for heap recovery
+     */
     public void insert(int key) {
         
         // handle if the heap is at maximum size 
@@ -261,6 +333,7 @@ class Heap
             return;
         }
         
+        // handle if the value is negative 
         if(key < 0) {
             System.out.println("Non-negative integer required for insertion");
             return;
@@ -288,6 +361,7 @@ class Heap
                 //update the index as necessary
                 idxKey = idxParent;
             } else {
+                //break the loop if the node satisfies the heap condition
                 break;
             }
             
@@ -299,9 +373,24 @@ class Heap
         
     }
     
+    /**
+     * @author: Kenneth Carroll
+     * @date: 09-27-2020
+     * 
+     * function to delete the maximum value in the heap
+     * by swapping the top of the heap with the last child leaf
+     * then upheap-ing back into satisfying the heap condition
+     * 
+     */
     public void deleteMax() {
+        
+        // swap the largest value with the last child leaf
         swap(0, n-1);
+        
+        // decrement n so that it can be overwritten with new data
         n--;
+        
+        // propogate upheap 
         for(int i = 0; i < n/2; i++) {
             upheap(i);
         }
