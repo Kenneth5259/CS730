@@ -261,6 +261,11 @@ class Heap
             return;
         }
         
+        if(key < 0) {
+            System.out.println("Non-negative integer required for insertion");
+            return;
+        }
+        
         // insert the key at the next available slot in the array
         int idxKey = n;
         a[idxKey] = key;
