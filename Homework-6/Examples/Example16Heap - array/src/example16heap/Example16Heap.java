@@ -45,7 +45,7 @@ public class Example16Heap
                     myheap.insert(input.nextInt());
                     break;
                 case "4":
-                    System.out.println("Not Implemented Yet");
+                    myheap.deleteMax();
                     break;
                 case "5":
                     System.out.println("Enter the key to be searched for: ");
@@ -297,6 +297,14 @@ class Heap
         
         
         
+    }
+    
+    public void deleteMax() {
+        swap(0, n-1);
+        n--;
+        for(int i = 0; i < n/2; i++) {
+            upheap(i);
+        }
     }
     
     public boolean isEmpty()
